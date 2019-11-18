@@ -5,5 +5,6 @@
     /// </summary>
     interface IPoint
     {
+        double X { get; }
     }
 }
