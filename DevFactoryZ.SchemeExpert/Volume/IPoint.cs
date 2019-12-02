@@ -10,10 +10,10 @@ namespace DevFactoryZ.SchemeExpert.Volume
         double X { get; set; }
         double Y { get; set; }
 
-        event EventHandler<PointChangedEventArgs<IPoint>> OnLocationChanged;
+        event EventHandler<PointChangedEventArgs> OnLocationChanged;
     }
 
-    public class PointChangedEventArgs<IPoint> : EventArgs
+    public class PointChangedEventArgs : EventArgs
     {
         public IPoint OldLocation { get; set; }
         public IPoint NewLocation { get; set; }
