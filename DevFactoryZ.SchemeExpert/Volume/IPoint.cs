@@ -5,17 +5,27 @@ namespace DevFactoryZ.SchemeExpert.Volume
     /// <summary>
     /// Этот интерфейс описывает точку / вектор в 3-х мерном пространстве
     /// </summary>
-    public interface IPoint
-    {
-        double X { get; set; }
-        double Y { get; set; }
 
+    public interface IPoint : ICoordinate
+    {
         event EventHandler<PointChangedEventArgs> OnLocationChanged;
     }
 
     public class PointChangedEventArgs : EventArgs
     {
-        public IPoint OldLocation { get; set; }
-        public IPoint NewLocation { get; set; }
+        private readonly ICoordinate coordinate;
+
+        public PointChangedEventArgs(ICoordinate coordinate)
+        {
+            this.coordinate = coordinate;
+        }
+        
+        public ICoordinate Coordinate 
+        { 
+            get
+            {
+                return coordinate;
+            }
+        }
     }
 }
