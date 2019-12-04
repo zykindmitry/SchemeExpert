@@ -20,12 +20,6 @@ namespace DevFactoryZ.SchemeExpert.Volume
             this.coordinate = coordinate;
         }
         
-        public ICoordinate Coordinate 
-        { 
-            get
-            {
-                return coordinate;
-            }
-        }
+        public ICoordinate Coordinate { get; }
     }
 }
