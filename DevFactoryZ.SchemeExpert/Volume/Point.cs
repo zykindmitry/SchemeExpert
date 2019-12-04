@@ -1,6 +1,5 @@
 ﻿using System;
 using System.ComponentModel;
-using System.Runtime.CompilerServices;
 
 namespace DevFactoryZ.SchemeExpert._3D
 {
@@ -104,7 +103,7 @@ namespace DevFactoryZ.SchemeExpert._3D
         /// <summary>
         /// Событие, наступающее при изменении любой из координат 3D-точки / вектора.
         /// </summary>
-        public event EventHandler<PointChangedEventArgs> PointMoved;
+        public event EventHandler<PointCoordinatesChangedEventArgs> PointMoved;
 
         /// <summary>
         /// Метод для генерации события <see cref="PointMoved"/>.
@@ -114,7 +113,7 @@ namespace DevFactoryZ.SchemeExpert._3D
         {
             var temp = PointMoved;
 
-            temp?.Invoke(this, new PointChangedEventArgs(point));
+            temp?.Invoke(this, new PointCoordinatesChangedEventArgs(point));
         }
 
         #endregion

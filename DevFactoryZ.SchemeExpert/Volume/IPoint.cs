@@ -1,6 +1,4 @@
-﻿using System.ComponentModel;
-
-namespace DevFactoryZ.SchemeExpert._3D
+﻿namespace DevFactoryZ.SchemeExpert._3D
 {
     /// <summary>
     /// Этот интерфейс описывает точку / вектор в 3-х мерном пространстве.
