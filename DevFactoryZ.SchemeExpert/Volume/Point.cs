@@ -12,9 +12,14 @@ namespace DevFactoryZ.SchemeExpert._3D
         #region .ctor
 
         /// <summary>
-        /// Создает экземпляр <see cref="Point"/> с нулевыми координатами.
+        /// Создает экземпляр <see cref="Point"/> с заданными координатами.
         /// </summary>
-        public Point()
+        /// <param name="x">Координата 3D-точки / вектора по оси X.</param>
+        /// <param name="y">Координата 3D-точки / вектора по оси Y.</param>
+        /// <param name="z">Координата 3D-точки / вектора по оси Z.</param>
+        /// <param name="precision">Количество знаков после запятой, участвующих в сравнении значений двух координат.</param>
+        public Point(double x, double y, double z, uint precision)
+            : this(new Location(x, y, z, precision))
         {
 
         }
@@ -22,12 +27,10 @@ namespace DevFactoryZ.SchemeExpert._3D
         /// <summary>
         /// Создает экземпляр <see cref="Point"/> с заданными координатами.
         /// </summary>
-        /// <param name="x">Координата по оси X.</param>
-        /// <param name="y">Координата по оси Y.</param>
-        /// <param name="z">Координата по оси Z.</param>
-        public Point(double x, double y, double z)
+        /// <param name="location">Координаты создаваемого экземпляра <see cref="Point"/></param>
+        public Point(SchemeExpert.ILocation location)
         {
-            MoveTo(x, y, z);
+            MoveTo(location);
         }
 
         #endregion
@@ -35,38 +38,10 @@ namespace DevFactoryZ.SchemeExpert._3D
         #region Текущие координаты 3D-точки / вектора
 
         /// <summary>
-        /// Координата 3D-точки / вектора по оси <see cref="X"/>.
+        /// Текущие координаты 3D-точки / вектора, а также параметр, определяющий точность сравнения значений координат - 
+        /// количество знаков после запятой, участвующих в сравнении значений двух координат.
         /// </summary>
-        public double X { get; private set; }
-
-        /// <summary>
-        /// Координата 3D-точки / вектора по оси <see cref="Y"/>.
-        /// </summary>
-        public double Y { get; private set; }
-
-        /// <summary>
-        /// Координата 3D-точки / вектора по оси <see cref="Z"/>.
-        /// </summary>
-        public double Z { get; private set; }
-
-        #endregion
-
-        #region Предыдущие координаты 3D-точки / вектора
-
-        /// <summary>
-        /// Координата 3D-точки / вектора по оси <see cref="X"/>.
-        /// </summary>
-        public double PreviousX { get; private set; }
-
-        /// <summary>
-        /// Координата 3D-точки / вектора по оси <see cref="Y"/>.
-        /// </summary>
-        public double PreviousY { get; private set; }
-
-        /// <summary>
-        /// Координата 3D-точки / вектора по оси <see cref="Z"/>.
-        /// </summary>
-        public double PreviousZ { get; private set; }
+        public SchemeExpert.ILocation Location { get; private set; }
 
         #endregion
 
@@ -78,21 +53,40 @@ namespace DevFactoryZ.SchemeExpert._3D
         /// <param name="newValueX">Новое значение координаты 3D-точки / вектора по оси <see cref="X"/>.</param>
         /// <param name="newValueY">Новое значение координаты 3D-точки / вектора по оси <see cref="Y"/>.</param>
         /// <param name="newValueZ">Новое значение координаты 3D-точки / вектора по оси <see cref="Z"/>.</param>
-        public void MoveTo(double newValueX, double newValueY, double newValueZ)
+        /// <param name="newValuePrecision">Новое значение количества знаков после запятой, участвующих в сравнении значений двух координат.</param>
+        public void MoveTo(double newValueX, double newValueY, double newValueZ, uint newValuePrecision)
         {
-            // Сохраняем предыдущие значения координат
-            PreviousX = X;
-            PreviousY = Y;
-            PreviousZ = Z;
+            MoveTo(new Location(newValueX, newValueY, newValueZ, newValuePrecision));
+        }
 
-            // Если хотя бы одна из координат изменилась - сохраняем новые значения координат и генерируем событие PointMoved
-            if (!PreviousX.Equals(newValueX) || !PreviousY.Equals(newValueY) || !PreviousZ.Equals(newValueZ))
+        /// <summary>
+        /// Установка нового значения координат 3D-точки / вектора.
+        /// </summary>
+        /// <param name="newLocation">Новые координаты 3D-точки / вектора, а также новое значение количества знаков после запятой, участвующих в сравнении значений двух координат.</param>
+        public void MoveTo(SchemeExpert.ILocation newLocation)
+        {
+            if (newLocation == null)
             {
-                X = newValueX;
-                Y = newValueY;
-                Z = newValueZ;
+                throw new ArgumentNullException(nameof(newLocation), "Не заданы координаты 3D-точки / вектора.");
+            }
 
-                OnPointMoved(this);
+            // Если это новый объект Point, то не нужно генерить событие PointMoved
+            if (Location == null)
+            {
+                Location = new Location(newLocation.X, newLocation.Y, newLocation.Z, newLocation.Precision);
+            }
+            else
+            {
+                // Сохраняем предыдущие значения координат
+                var previous = new Location(Location.X, Location.Y, Location.Z, Location.Precision);
+
+                // Если хотя бы одна из координат изменилась - сохраняем новые значения координат и генерируем событие PointMoved
+                if (!previous.Equals(newLocation))
+                {
+                    Location = newLocation;
+
+                    OnPointMoved((SchemeExpert.ILocation)previous, (SchemeExpert.ILocation)Location);
+                }
             }
         }
 
@@ -100,20 +94,16 @@ namespace DevFactoryZ.SchemeExpert._3D
 
         #region PointMoved implementation
 
-        /// <summary>
-        /// Событие, наступающее при изменении любой из координат 3D-точки / вектора.
-        /// </summary>
-        public event EventHandler<PointCoordinatesChangedEventArgs> PointMoved;
+        public event EventHandler<LocationChangedEventArgs> PointMoved;
 
         /// <summary>
         /// Метод для генерации события <see cref="PointMoved"/>.
         /// </summary>
-        /// <param name="point">Информация о предыдущем и текущем (новом) значении координат точки.</param>
-        protected virtual void OnPointMoved(IPoint point)
+        /// <param name="previous">Информация о предыдущем (старом) значении координат 3D-точки / вектора.</param>
+        /// <param name="current">Информация о текущем (новом) значении координат 3D-точки / вектора.</param>
+        protected virtual void OnPointMoved(SchemeExpert.ILocation previous, SchemeExpert.ILocation current)
         {
-            var temp = PointMoved;
-
-            temp?.Invoke(this, new PointCoordinatesChangedEventArgs(point));
+            PointMoved?.Invoke(this, new LocationChangedEventArgs(previous, current));
         }
 
         #endregion
