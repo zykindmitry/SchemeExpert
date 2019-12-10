@@ -1,6 +1,6 @@
-﻿using DevFactoryZ.SchemeExpert;
+﻿using System;
 
-namespace System.ComponentModel
+namespace DevFactoryZ.SchemeExpert._3D
 {
     /// <summary>
     /// Расширение класса <see cref="EventArgs"/> 

@@ -1,5 +1,4 @@
 ﻿using System;
-using System.ComponentModel;
 
 namespace DevFactoryZ.SchemeExpert._3D
 {
@@ -11,7 +10,7 @@ namespace DevFactoryZ.SchemeExpert._3D
         /// <summary>
         /// Текущие координаты 3D-точки / вектора.
         /// </summary>
-        SchemeExpert.ILocation Location { get; }
+        ILocation Location { get; }
 
         /// <summary>
         /// Событие, наступающее при изменении любой из координат 3D-точки / вектора.

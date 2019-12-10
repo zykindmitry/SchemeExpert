@@ -1,4 +1,5 @@
 ﻿using System;
+using DevFactoryZ.SchemeExpert.Extensions;
 
 namespace DevFactoryZ.SchemeExpert._3D
 {
@@ -9,7 +10,7 @@ namespace DevFactoryZ.SchemeExpert._3D
     /// а также параметр, определяющий точность сравнения значений координат - 
     /// количество знаков после запятой, участвующих в сравнении значений двух координат.
     /// </summary>
-    public class Location : SchemeExpert.ILocation
+    public class Location : ILocation
     {
         #region .ctor
 
@@ -19,13 +20,13 @@ namespace DevFactoryZ.SchemeExpert._3D
         /// <param name="x">Координата 3D-точки / вектора по оси <see cref="X"/>.</param>
         /// <param name="y">Координата 3D-точки / вектора по оси <see cref="Y"/>.</param>
         /// <param name="z">Координата 3D-точки / вектора по оси <see cref="Z"/>.</param>
-        /// <param name="precision">Количество знаков после запятой, участвующих в сравнении значений двух координат.</param>
+        /// <param name="precision">Точность сравнения - количество знаков после запятой, участвующих в сравнении значений двух координат.</param>
         public Location(double x, double y, double z, uint precision)
         {
             X = x;
             Y = y;
             Z = z;
-            Precision = precision;
+            this.precision = precision;
         }
 
         #endregion
@@ -53,15 +54,73 @@ namespace DevFactoryZ.SchemeExpert._3D
         /// Точность сравнения значений координат - 
         /// количество знаков после запятой, участвующих в сравнении значений двух координат.
         /// </summary>
-        public uint Precision { get; }
+        readonly uint precision;
 
-        #region Переопределенные методы
+        #region Методы изменения значений координат
+
+        /// <summary>
+        /// Возвращает новый экземпляр <see cref="ILocation"/>, суммируя заданные значения координат вектора перемещения с координатами текущего экземпляра <see cref="ILocation"/>.
+        /// Точность сравнения значений координат берется из текущего экземпляра <see cref="ILocation"/>.
+        /// </summary>
+        /// <param name="x">Координата вектора перемещения по оси <see cref="X"/>.</param>
+        /// <param name="y">Координата вектора перемещения по оси <see cref="Y"/>.</param>
+        /// <param name="z">Координата вектора перемещения по оси <see cref="Z"/>.</param>
+        /// <returns>Новый экземпляр <see cref="ILocation"/>.</returns>
+        public ILocation CreateByAdding(double x, double y, double z)
+        {
+            return new Location(x + X, y + Y, z + Z, precision);
+        }
+
+        /// <summary>
+        /// Возвращает новый экземпляр <see cref="ILocation"/>, суммируя значения координат заданного вектора перемещения с координатами текущего экземпляра <see cref="ILocation"/>.
+        /// Точность сравнения значений координат берется из текущего экземпляра <see cref="ILocation"/>.
+        /// </summary>
+        /// <param name="vector">Вектор перемещения 3D-точки.</param>
+        /// <returns>Новый экземпляр <see cref="ILocation"/>.</returns>
+        public ILocation CreateByAdding(ILocation vector)
+        {
+            return CreateByAdding(vector?.X ?? 0, vector?.Y ?? 0, vector?.Z ?? 0);
+        }
+
+        /// <summary>
+        /// Возвращает новый экземпляр <see cref="ILocation"/> с заданными координатами.
+        /// </summary>
+        /// <param name="x">Координата 3D-точки / вектора по оси <see cref="X"/>.</param>
+        /// <param name="y">Координата 3D-точки / вектора по оси <see cref="Y"/>.</param>
+        /// <param name="z">Координата 3D-точки / вектора по оси <see cref="Z"/>.</param>
+        /// <returns>Новый экземпляр <see cref="ILocation"/>.</returns>
+        public ILocation CreateNew(double x, double y, double z)
+        {
+            return new Location(x, y, z, precision);
+        }
+
+        /// <summary>
+        /// Возвращает новый экземпляр <see cref="ILocation"/> с заданными координатами.
+        /// </summary>
+        /// <param name="location">Координаты 3D-точки / вектора.</param>
+        /// <returns>Новый экземпляр <see cref="ILocation"/>.</returns>
+        public ILocation CreateNew(ILocation location)
+        {
+            if (location == null)
+            {
+                throw new ArgumentNullException(nameof(location), "Не заданы координаты 3D-точки / вектора.");
+            }
+
+            return CreateNew(location.X, location.Y, location.Z);
+        }
+
+        #endregion
+
+        #region Переопределенные методы и операторы
 
         public override bool Equals(object obj)
         {
             return !(obj is Location compareWith) ? false
-                : X.Equals(compareWith.X, compareWith.Precision) && Y.Equals(compareWith.Y, compareWith.Precision) && Z.Equals(compareWith.Z, compareWith.Precision);
+                : X.Equals(compareWith.X, precision) && Y.Equals(compareWith.Y, precision) && Z.Equals(compareWith.Z, precision);
         }
+
+        public static bool operator ==(Location left, object right) => left.Equals(right);
+        public static bool operator !=(Location left, object right) => !left.Equals(right);
 
         public override int GetHashCode()
         {

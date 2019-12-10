@@ -1,4 +1,6 @@
-﻿namespace System
+﻿using System;
+
+namespace DevFactoryZ.SchemeExpert.Extensions
 {
     public static class DoubleExtensions
     {
