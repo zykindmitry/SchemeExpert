@@ -124,7 +124,13 @@ namespace DevFactoryZ.SchemeExpert._3D
 
         public override int GetHashCode()
         {
-            return base.GetHashCode();
+            var hash = 19;
+
+            hash = hash * 37 + X.GetHashCode();
+            hash = hash * 37 + Y.GetHashCode();
+            hash = hash * 37 + Z.GetHashCode();
+
+            return hash;
         }
 
         #endregion
