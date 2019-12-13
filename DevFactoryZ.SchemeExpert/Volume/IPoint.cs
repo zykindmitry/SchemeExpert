@@ -1,25 +1,20 @@
 ﻿using System;
-using System.Collections.Generic;
-namespace DevFactoryZ.SchemeExpert.Volume
+
+namespace DevFactoryZ.SchemeExpert._3D
 {
     /// <summary>
-    /// Этот интерфейс описывает точку / вектор в 3-х мерном пространстве
+    /// Этот интерфейс описывает точку / вектор в 3-х мерном пространстве.
     /// </summary>
-
-    public interface IPoint : ICoordinate
+    public interface IPoint 
     {
-        event EventHandler<PointChangedEventArgs> OnLocationChanged;
-    }
+        /// <summary>
+        /// Текущие координаты 3D-точки / вектора.
+        /// </summary>
+        ILocation Location { get; }
 
-    public class PointChangedEventArgs : EventArgs
-    {
-        private readonly ICoordinate coordinate;
-
-        public PointChangedEventArgs(ICoordinate coordinate)
-        {
-            this.coordinate = coordinate;
-        }
-        
-        public ICoordinate Coordinate { get; }
+        /// <summary>
+        /// Событие, наступающее при изменении любой из координат 3D-точки / вектора.
+        /// </summary>
+        event EventHandler<LocationChangedEventArgs> PointMoved;
     }
 }
