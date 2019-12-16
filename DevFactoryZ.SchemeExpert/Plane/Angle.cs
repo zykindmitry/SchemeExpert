@@ -2,24 +2,20 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace DevFactoryZ.SchemeExpert.Volume
+namespace DevFactoryZ.SchemeExpert._2D
 {
     /// <summary>
-    /// Класс, описывающий объект Angle.
+    /// Описание структуры Angle.
     /// </summary>
     /// Имеет свойства: 
     ///     Degree <see cref="Dergee"/> - величина угла в градусах.
     ///     Radians <see cref="Radians"/> - величина угла в радианах.
-    public class Angle
+    public struct Angle
     {
-        public double Dergee { get; private set; }
+        public double Dergee => 180.0 / Math.PI * Radians;
         public double Radians { get; private set; }
 
         #region .ctor
-
-        private Angle()
-        {
-        }
 
         /// <summary>
         /// Статический метод, позволяющий создать объект Angle, имеющий указанную величину в градусах и преобразующий ее в радианы.
@@ -29,7 +25,6 @@ namespace DevFactoryZ.SchemeExpert.Volume
         public static Angle FromDegrees(double degree)
         {
             Angle angle = new Angle();
-            angle.Dergee = degree;
             angle.Radians = Math.PI / 180.0 * degree;
             return angle;
         }
@@ -43,7 +38,6 @@ namespace DevFactoryZ.SchemeExpert.Volume
         {
             Angle angle = new Angle();
             angle.Radians = radians;
-            angle.Dergee = 180.0 / Math.PI * radians;
             return angle;
         }
 

@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace DevFactoryZ.SchemeExpert.Volume
+﻿namespace DevFactoryZ.SchemeExpert._2D
 {
     /// <summary>
     /// Интерфейс, описывающий координаты точки.
