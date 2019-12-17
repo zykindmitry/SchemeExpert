@@ -1,6 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
+using DevFactoryZ.SchemeExpert.Extensions;
 
 namespace DevFactoryZ.SchemeExpert._2D
 {
@@ -89,8 +88,7 @@ namespace DevFactoryZ.SchemeExpert._2D
             }
             else
             {
-                Point p = (Point)obj;
-                return (X.Equals(p.X, precision) && Equals(p.X, precision));
+                return (obj is Point pointToCompare) && X.Equals(pointToCompare.X, precision) && Y.Equals(pointToCompare.Y, precision);
             }
         }
         public static bool operator ==(Point left, object right) => left.Equals(right);
