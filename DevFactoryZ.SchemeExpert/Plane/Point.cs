@@ -82,14 +82,7 @@ namespace DevFactoryZ.SchemeExpert._2D
         readonly uint precision;
         public override bool Equals(object obj)
         {
-            if ((obj == null) || !this.GetType().Equals(obj.GetType()))
-            {
-                return false;
-            }
-            else
-            {
-                return (obj is Point pointToCompare) && X.Equals(pointToCompare.X, precision) && Y.Equals(pointToCompare.Y, precision);
-            }
+            return !(obj is Point pointToCompare) ? false : X.Equals(pointToCompare.X, precision) && Y.Equals(pointToCompare.Y, precision);
         }
         public static bool operator ==(Point left, object right) => left.Equals(right);
         public static bool operator !=(Point left, object right) => !left.Equals(right);
