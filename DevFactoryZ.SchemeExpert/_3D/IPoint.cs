@@ -15,6 +15,6 @@ namespace DevFactoryZ.SchemeExpert._3D
         /// <summary>
         /// Событие, наступающее при изменении любой из координат 3D-точки / вектора.
         /// </summary>
-        event EventHandler<LocationChangedEventArgs> PointMoved;
+        event EventHandler<LocationChangedEventArgs> LocationChanged;
     }
 }

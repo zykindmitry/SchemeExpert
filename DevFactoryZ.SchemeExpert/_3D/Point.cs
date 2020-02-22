@@ -4,7 +4,7 @@ namespace DevFactoryZ.SchemeExpert._3D
 {
     /// <summary>
     /// Этот класс представляет точку / вектор в 3-х мерном пространстве.
-    /// Оповещает об изменении любой из координат при подписке на событие <see cref="PointMoved"/>. 
+    /// Оповещает об изменении любой из координат при подписке на событие <see cref="LocationChanged"/>. 
     /// </summary>
     public class Point : IPoint
     {
@@ -87,16 +87,16 @@ namespace DevFactoryZ.SchemeExpert._3D
 
         #region PointMoved implementation
 
-        public event EventHandler<LocationChangedEventArgs> PointMoved;
+        public event EventHandler<LocationChangedEventArgs> LocationChanged;
 
         /// <summary>
-        /// Метод для генерации события <see cref="PointMoved"/>.
+        /// Метод для генерации события <see cref="LocationChanged"/>.
         /// </summary>
         /// <param name="previous">Информация о предыдущем (старом) значении координат 3D-точки / вектора.</param>
         /// <param name="current">Информация о текущем (новом) значении координат 3D-точки / вектора.</param>
         protected virtual void OnPointMoved(ILocation previous, ILocation current)
         {
-            PointMoved?.Invoke(this, new LocationChangedEventArgs(previous, current));
+            LocationChanged?.Invoke(this, new LocationChangedEventArgs(previous, current));
         }
 
         #endregion

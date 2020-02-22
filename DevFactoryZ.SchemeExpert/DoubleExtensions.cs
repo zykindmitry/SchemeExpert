@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace DevFactoryZ.SchemeExpert.Extensions
+namespace DevFactoryZ.SchemeExpert
 {
     public static class DoubleExtensions
     {

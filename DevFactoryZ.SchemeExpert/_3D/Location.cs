@@ -1,5 +1,4 @@
 ﻿using System;
-using DevFactoryZ.SchemeExpert.Extensions;
 
 namespace DevFactoryZ.SchemeExpert._3D
 {
